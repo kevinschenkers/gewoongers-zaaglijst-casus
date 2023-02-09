@@ -1,66 +1,51 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## Lokaal installeren
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Om deze applicatie lokaal op te zetten kan je de volgende stappen volgen:
+1. Fork het project. Zie [hier](https://docs.github.com/en/get-started/quickstart/fork-a-repo) meer informatie over 
+het forken van een project.
+2. Doe `composer install` om alle benodigde packages van laravel te installeren. Heb je nog geen composer op 
+jouw machine staan dan kan je [hier](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos) lezen 
+hoe je het kan installeren.
+3. Doe `php artisan serve` en de applicatie is dan te benaderen op localhost.
 
-## About Laravel
+## Casus
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+We gaan een casus maken die sollicitanten (en liefhebbers) kunnen maken. Dit wordt een repo die mensen allemaal mogen 
+forken en lekker los gaan op de code. Op basis van deze casus krijgen we een beter inzicht van de skills van de devs 
+die hier solliciteren.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Vraagstuk
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+In hal 3 worden er dagelijks profielen gepickt die de productie heel de dag moet kunnen bevoorraden. Een deur bestaat 
+uit verschillende profielen. Een profiel wordt aangeduid met de letter “G“ als prefix (dus wij hebben profielen G01 
+tot en met G72). Er zijn dus 72 verschillende profielen die gebruikt worden om onze deuren te maken. Elk profiel is 
+ook in al onze 12 kleuren beschikbaar.
 
-## Learning Laravel
+De orderpicker kijkt in de huidige situatie naar alle deuren die die dag gemaakt moeten worden en op basis daarvan 
+maakt diegene een inschatting wat er aan profielen nodig is die dag. Dit is een proces wat inefficiënt is en enorm 
+veel tijd kost om uit te rekenen wat er op een dag nodig is.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Wat is de oplossing?
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Wat de orderpicker in hal 3 enorm kan helpen is een lijst met hoeveel profielen in welke kleur diegene die dag moet 
+picken om aan de vraag te kunnen voldoen van de productie. Hier een voorbeeld van het resultaat:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```json
+{
+   "G01": {
+      "PROFIELKLEUR: RAL 9005 Gitzwart": 5,
+      "PROFIELKLEUR: Brons": 4,
+      "PROFIELKLEUR: RAL 7021 Zwartgrijs": 1
+   },
+   "G45": {
+      "PROFIELKLEUR: RAL 9005 Gitzwart": 8,
+      "PROFIELKLEUR: Wit": 2,
+   },
+   "G70": {
+      "PROFIELKLEUR: RAL 9005 Gitzwart": 8,
+      "PROFIELKLEUR: Wit": 2,
+      "PROFIELKLEUR: Brons": 4,
+   } 
+}
+```
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

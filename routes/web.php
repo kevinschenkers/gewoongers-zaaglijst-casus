@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProductionStateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,5 +16,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('data', [ProductionStateController::class, "index"]);
