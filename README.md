@@ -7,6 +7,20 @@ het forken van een project.
 jouw machine staan dan kan je [hier](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos) lezen 
 hoe je het kan installeren.
 3. Doe `php artisan serve` en de applicatie is dan te benaderen op localhost.
+4. Als je naar `http://127.0.0.1:8000/api/data` gaat zie je de huidige dataset. Het is een json output en het is 
+bijvoorbeeld handig om hiervoor [Postman](https://www.postman.com/downloads/) te gebruiken.
+
+## Waar kan ik beginnen?
+
+Er is een controller aangemaakt genaamd `ProductionStateController`. In deze functie zit tot nu toe nog één functie
+`index`. Deze functie pakt de json data uit `storage/data/ProductieStaat.json` en doet tot nu toe een `echo`. De `echo`
+heb ik er in gezet, zodat je het json bestand kan benaderen via een endpoint.   
+
+Deze controller is jouw startpunt. Je mag natuurlijk alles doen wat jij denkt wat nodig is om op de oplossing te komen.
+Dus denk jij dat het nodig is gebruik te maken van meerdere controllers of ga je gebruik maken van eigen gemaakte 
+traits is dat zeker geen probleem! Nogmaals, je krijgt alle vrijheid.
+
+Genoeg tekst! Je mag eindelijk aan de slag!
 
 ## Casus
 
