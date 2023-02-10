@@ -1,3 +1,6 @@
+# Casus zaaglijst
+Niveau: ~~makkelijk~~/gemiddeld/~~moeilijk~~]
+
 ## Lokaal installeren
 
 Om deze applicatie lokaal op te zetten kan je de volgende stappen volgen:
@@ -17,8 +20,8 @@ Er is een controller aangemaakt genaamd `ProductionStateController`. In deze fun
 heb ik er in gezet, zodat je het json bestand kan benaderen via een endpoint.   
 
 Deze controller is jouw startpunt. Je mag natuurlijk alles doen wat jij denkt wat nodig is om op de oplossing te komen.
-Dus denk jij dat het nodig is gebruik te maken van meerdere controllers of ga je gebruik maken van eigen gemaakte 
-traits is dat zeker geen probleem! Nogmaals, je krijgt alle vrijheid.
+Dus denk jij dat het nodig is gebruik te maken van meerdere controllers of ga je gebruik maken van tests is dat zeker 
+geen probleem! Nogmaals, je krijgt alle vrijheid.
 
 Genoeg tekst! Je mag eindelijk aan de slag!
 
@@ -42,24 +45,232 @@ veel tijd kost om uit te rekenen wat er op een dag nodig is.
 ### Wat is de oplossing?
 
 Wat de orderpicker in hal 3 enorm kan helpen is een lijst met hoeveel profielen in welke kleur diegene die dag moet 
-picken om aan de vraag te kunnen voldoen van de productie. Hier een voorbeeld van het resultaat:
+picken om aan de vraag te kunnen voldoen van de productie. 
+
+Om uit te kunnen rekenen hoeveel profielen er nodig zijn maken wij gebruik van een externe API 
+[optiCutter](https://www.opticutter.com/public/doc/api#introduction). Die berekend aan de hand van elk profiel hoeveel 
+er nodig zijn op basis van de afmetingen en de hoeveelheid profielen er van die maat gezaagd moeten gaan worden. 
+Deze API neemt ook gelijk de efficiënste manier van zagen mee. Dit betekent dat wij ook gelijk de "waste" kunnen 
+verminderen met deze oplossing! 
+
+De input die wij nodig hebben om deze API te vullen is het onderstaande object. 
 
 ```json
 {
-   "G01": {
-      "PROFIELKLEUR: RAL 9005 Gitzwart": 5,
-      "PROFIELKLEUR: Brons": 4,
-      "PROFIELKLEUR: RAL 7021 Zwartgrijs": 1
-   },
-   "G45": {
-      "PROFIELKLEUR: RAL 9005 Gitzwart": 8,
-      "PROFIELKLEUR: Wit": 2,
-   },
-   "G70": {
-      "PROFIELKLEUR: RAL 9005 Gitzwart": 8,
-      "PROFIELKLEUR: Wit": 2,
-      "PROFIELKLEUR: Brons": 4,
-   } 
+    "PROFIELKLEUR: RAL 9005 Gitzwart": {
+        "G01": [
+            {
+                "length": 1987,
+                "count": 2
+            },
+            {
+                "length": 250,
+                "count": 5
+            },
+            {
+                "length": 557,
+                "count": 2
+            }
+        ],
+        "G21": [
+            {
+                "length": 876,
+                "count": 5
+            },
+            {
+                "length": 452,
+                "count": 1
+            }
+        ]
+    },
+    "PROFIELKLEUR: Brons": {
+        "G45": [
+            {
+              "length": 1222,
+              "count": 5
+            },
+            {
+              "length": 887,
+              "count": 2
+            }
+        ],
+        "G56": [
+            {
+                "length": 123,
+                "count": 1
+            }
+        ]
+    }
+}
+```
+
+#### Opbouw van dit object
+
+De mapping van de data heb ik hieronder beschreven. In het `ProductieStaat.json` staan ongeveer 75 productiestaten.  
+
+```json
+{
+    "<saw.profielkleur.title>": {
+        "<saw.*.title>": {
+            "length": "<saw.*.value>",
+            "count": "<saw.*.amount>"
+        }
+    }...
+}
+```
+
+Voor deze casus hoef jij je alleen maar te focussen op het `saw` object. In dit object kan je alle profielen vinden die 
+gezaagd moeten worden die dag. De uitdaging is dat de profielen niet in de profielnamen ("G40") staan, maar als 
+bijvoorbeeld `liggerG40`. Van `liggerg40` moet je `G40` maken. 
+
+De profielkleur kan je vinden in `profielkleur.title`. Deze titel kan je gebruiken als unique identifier.
+
+## Scope van deze casus
+
+De scope van deze casus is alleen het muteren van het `ProductieStaat.json` bestand naar het bovenstaande object.
+Heb je een soortgelijk object kunnen maken dan voldoe je aan de scope van deze casus. 
+
+In elke productiestaat kan je alle data vinden in het `saw` object.
+
+## Requirements
+
+Om de dataset juist te muteren moet je aan een paar requirements voldoen om tot het juiste antwoord te komen:
+- Je hoeft alleen de profielen mee te nemen waar een G nummer in voorkomt, dus bijvoorbeeld:
+  - `OnderbovenProfielg41` is een profiel
+  - `exactinputtaatsdeur_z` is geen profiel. Hier zit namelijk geen G nummer in verwerkt
+- Er zijn ook twee profielen die in elkaar passen. En dus dezelfde kleur en maat hebben. Voor dit soort 
+profielcombinaties heb je bijvoorbeeld `staanderg54g56taatsdeur`. Zoals je ziet zitten hier twee G nummer in. Dus als 
+je in dit object een `value` heb van `2396` en een `amount` van `2`. Dan krijg je het volgende resultaat (profielkleur 
+is `PROFIELKLEUR: RAL 7032 Kiezel grijs`):
+```json
+{
+    "PROFIELKLEUR: RAL 7032 Kiezel grijs": {
+        "G54": {
+            "length": 2396,
+            "count": 2
+        },
+        "G56": {
+            "length": 2396,
+            "count": 2
+        }
+    }
+}
+```
+- Dezelfde G nummers en kleuren moeten bij elkaar gemapped worden. Ik zal hier een voorbeeld geven van de huidige 
+situatie en de gewenste situatie:
+#### Huidige situatie
+```json
+{
+    "id": 123,
+    "saw": {
+        "liggerg40": {
+            "title": "Ligger G40",
+            "amount": 2,
+            "value": 1600
+        },
+        "staanderg54g56taatsdeur": {
+            "title": "Staander G54 + G56 taatsdeur",
+            "amount": 2,
+            "value": 2396
+        },
+        "profielkleur": {
+            "title": "PROFIELKLEUR: RAL 7032 Kiezel grijs"
+        }
+    }
+},
+{
+    "id": 456,
+    "saw": {
+        "staandersg70verstekdeur": {
+            "title": "Staanders G70 verstek deur",
+            "amount": 2,
+            "value": 2400
+        },
+        "staanderg62g69deur": {
+            "title": "Staander G69 deur",
+            "amount": 1,
+            "value": 2400
+        },
+        "profielkleur": {
+            "title": "PROFIELKLEUR: Leem"
+        }
+    }
+},
+{
+    "id": 789,
+    "saw": {
+        "staandersg70verstekdeur": {
+            "title": "Staanders G70 verstek deur",
+            "amount": 2,
+            "value": 2785
+        },
+        "staanderg62g69deur": {
+            "title": "Staander G69 deur",
+            "amount": 1,
+            "value": 2785
+        },
+        "liggerg40": {
+            "title": "Ligger G40",
+            "amount": 2,
+            "value": 1600
+        },
+        "profielkleur": {
+            "title": "PROFIELKLEUR: Leem"
+        }
+    }
+}
+```
+
+#### Gewenste situatie
+
+```json
+{
+    "PROFIELKLEUR: RAL 7032 Kiezel grijs": {
+        "G40": [
+            {
+                "length": 1600,
+                "count": 2
+            }
+        ],
+        "G54": [
+            {
+                "length": 2396,
+                "count": 2
+            }
+        ],
+        "G56": [
+            {
+                "length": 2396,
+                "count": 2
+            }
+        ]
+    },
+    "PROFIELKLEUR: Leem": {
+        "G70": [
+            {
+              "length": 2785,
+              "count": 2
+            }
+        ],
+        "G62": [
+            {
+                "length": 2785,
+                "count": 1
+            }
+        ],
+        "G69": [
+            {
+                "length": 2785,
+                "count": 1
+            }
+        ],
+        "G40": [
+            {
+                "length": 1600,
+                "count": 1
+            }
+        ]
+    }
 }
 ```
 
