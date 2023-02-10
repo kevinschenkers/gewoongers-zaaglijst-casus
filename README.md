@@ -45,7 +45,7 @@ picken om aan de vraag te kunnen voldoen van de productie.
 Om uit te kunnen rekenen hoeveel profielen er nodig zijn maken wij gebruik van een externe API 
 [optiCutter](https://www.opticutter.com/public/doc/api#introduction). Die berekend aan de hand van elk profiel hoeveel 
 er nodig zijn op basis van de afmetingen en de hoeveelheid profielen er van die maat gezaagd moeten gaan worden. 
-Deze API neemt ook gelijk de efficiënste manier van zagen mee. Dit betekent dat wij ook gelijk de "waste" kunnen 
+Deze API neemt ook gelijk de efficiëntste manier van zagen mee. Dit betekent dat wij ook gelijk de "waste" kunnen 
 verminderen met deze oplossing! 
 
 De input die wij nodig hebben om deze API te vullen is het onderstaande object. 
@@ -122,7 +122,7 @@ De profielkleur kan je vinden in `profielkleur.title`. Deze titel kan je gebruik
 
 ## Scope van deze casus
 
-De scope van deze casus is alleen het muteren van het `ProductieStaat.json` bestand naar het bovenstaande object.
+De scope van deze casus is alleen het muteren van het `ProductieStaat.json` bestand naar het dit object.
 Heb je een soortgelijk object kunnen maken dan voldoe je aan de scope van deze casus. 
 
 In elke productiestaat kan je alle data vinden in het `saw` object.
