@@ -21,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('data', [ProductionStateController::class, "index"]);
+
+Route::get('oplossing', [ProductionStateController::class, "solution"]);
