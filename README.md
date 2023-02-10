@@ -9,9 +9,10 @@ het forken van een project.
 2. Doe `composer install` om alle benodigde packages van laravel te installeren. Heb je nog geen composer op 
 jouw machine staan dan kan je [hier](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-macos) lezen 
 hoe je het kan installeren.
-3. Doe `php artisan serve` en de applicatie is dan te benaderen op localhost. Als je 
+3. Maak een kopie van het `.env.example` bestand en noem het `.env`. 
+4. Doe `php artisan serve` en de applicatie is dan te benaderen op localhost. Als je 
 [laravel valet](https://laravel.com/docs/9.x/valet) heb kan je hem ook daarmee draaien. 
-4. Als je naar `{{baseUrl}}/api/data` gaat zie je de huidige dataset. Het is een json output en het is 
+5. Als je naar `{{baseUrl}}/api/data` gaat zie je de huidige dataset. Het is een json output en het is 
 bijvoorbeeld handig om hiervoor [Postman](https://www.postman.com/downloads/) te gebruiken.
 
 ## Waar kan ik beginnen?
@@ -21,16 +22,16 @@ Er is een controller aangemaakt genaamd `ProductionStateController`. In deze fun
 
 Deze controller is jouw startpunt. Je mag natuurlijk alles doen wat jij denkt wat nodig is om op de oplossing te komen.
 Dus denk jij dat het nodig is gebruik te maken van meerdere controllers of ga je gebruik maken van tests is dat zeker 
-geen probleem! Nogmaals, je krijgt alle vrijheid.
+geen probleem. Nogmaals, je krijgt alle vrijheid.
 
-Genoeg tekst! Je mag eindelijk aan de slag!
+Genoeg tekst. Je mag eindelijk aan de slag!
 
 ## Casus
 
-In hal 3 worden er dagelijks profielen gepickt die de productie van een hele dag moet kunnen bevoorraden. Een deur 
-bestaat uit verschillende profielen. Een profiel wordt aangeduid met de letter “G“ als prefix (dus wij hebben profielen G01 
-tot en met G72). Er zijn dus 72 verschillende profielen die gebruikt worden om onze deuren te maken. Elk profiel is 
-ook in al onze 12 kleuren beschikbaar.
+In hal 3, waar al onze profielen staan opgeslagen, worden er dagelijks profielen gepickt die de productie van een hele 
+dag moet kunnen bevoorraden. Een deur bestaat uit verschillende profielen. Een profiel wordt aangeduid met de letter 
+`G` als prefix (dus wij hebben profielen G01 tot en met G72). Er zijn dus 72 verschillende profielen die gebruikt 
+worden om onze deuren te maken. Elk profiel is ook in al onze 12 kleuren beschikbaar.
 
 De orderpicker kijkt in de huidige situatie naar alle deuren die die dag gemaakt moeten worden en op basis daarvan 
 maakt diegene een inschatting wat er aan profielen nodig is die dag. Dit is een proces wat inefficiënt is en enorm 
